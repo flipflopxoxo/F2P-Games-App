@@ -1,6 +1,6 @@
-package com.clydelizardo.f2pgames.list.repository
+package com.clydelizardo.f2pgames.list.repository.api
 
-import com.clydelizardo.f2pgames.list.repository.model.GameDetail
+import com.clydelizardo.f2pgames.list.repository.api.model.GameDetail
 import retrofit2.http.GET
 
 interface GameDetailRepository {

@@ -1,4 +1,4 @@
-package com.clydelizardo.f2pgames.list.repository.model
+package com.clydelizardo.f2pgames.list.repository.api.model
 
 import com.squareup.moshi.Json
 
