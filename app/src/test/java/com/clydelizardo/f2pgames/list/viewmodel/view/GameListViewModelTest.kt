@@ -1,11 +1,20 @@
 package com.clydelizardo.f2pgames.list.viewmodel.view
 
+import com.clydelizardo.f2pgames.MainCoroutineRule
 import com.clydelizardo.f2pgames.list.usecase.GetFreeGamesResult
-import junit.framework.TestCase
+import com.clydelizardo.f2pgames.list.viewmodel.GameListViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import org.junit.Assert.assertEquals
+import org.junit.Rule
 import org.junit.Test
 import java.util.*
 
-class GameListViewModelTest : TestCase() {
+class GameListViewModelTest {
+    @ExperimentalCoroutinesApi
+    @get: Rule
+    val mainRule = MainCoroutineRule()
+
+    @ExperimentalCoroutinesApi
     @Test
     fun default_instantiate_retrieveListOfGames() {
         val gameList = listOf(
@@ -19,13 +28,15 @@ class GameListViewModelTest : TestCase() {
                 false
             )
         )
-        val viewModel = GameListViewModel({
+        val viewModel = GameListViewModel {
             GetFreeGamesResult.Success(gameList)
-        })
+        }
+        viewModel.start()
 
+        val first = viewModel.listOfGames.value
         assertEquals(
             gameList,
-            viewModel.listOfGames
+            first
         )
     }
 }
