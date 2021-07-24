@@ -4,6 +4,7 @@ import com.clydelizardo.f2pgames.MainCoroutineRule
 import com.clydelizardo.f2pgames.list.usecase.GetFreeGamesResult
 import com.clydelizardo.f2pgames.list.viewmodel.GameListViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
@@ -16,7 +17,7 @@ class GameListViewModelTest {
 
     @ExperimentalCoroutinesApi
     @Test
-    fun default_instantiate_retrieveListOfGames() {
+    fun default_instantiate_retrieveListOfGames() = runBlockingTest {
         val gameList = listOf(
             GameInfo(
                 "name1",
