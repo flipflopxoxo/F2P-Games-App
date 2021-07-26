@@ -3,6 +3,7 @@ package com.clydelizardo.f2pgames.list.viewmodel.view
 import java.util.*
 
 data class GameInfo(
+    val id: String,
     val name: String,
     val description: String,
     val releaseDate: Date,

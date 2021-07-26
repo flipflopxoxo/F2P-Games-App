@@ -9,6 +9,7 @@ class GameInfoRepositoryImpl(private val gameDetailDAO: GameDetailDAO) : GameInf
     override suspend fun getListOfGames(): Result<List<GameInfo>> = try {
         Result.success(gameDetailDAO.getListOfFreeGames().map {
             GameInfo(
+                it.id.toString(),
                 it.title,
                 it.shortDescription,
                 SimpleDateFormat().parse(it.releaseDate) ?: Date(0),
