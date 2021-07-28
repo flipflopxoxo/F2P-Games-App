@@ -28,7 +28,8 @@ fun GameDetail.toGameInfo() =
         genre,
         platform,
         gameUrl,
-        false
+        false,
+        thumbnail = thumbnail
     )
 
 private fun GameDetail.date(): Date? {

@@ -27,7 +27,8 @@ class GameListViewModelTest {
                 "FPS Shooter",
                 "PC (Windows)",
                 "https://google.com",
-                false
+                false,
+                thumbnail
             )
         )
         val viewModel = GameListViewModel {

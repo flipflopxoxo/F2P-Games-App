@@ -10,5 +10,6 @@ data class GameInfo(
     val genre: String,
     val platform: String,
     val link: String,
-    val isFavorite: Boolean
+    val isFavorite: Boolean,
+    val thumbnail: String
 )
