@@ -29,7 +29,9 @@ fun GameDetail.toGameInfo() =
         platform,
         gameUrl,
         false,
-        thumbnail = thumbnail
+        thumbnail = thumbnail,
+        publisher = publisher,
+        developer = developer
     )
 
 private fun GameDetail.date(): Date? {

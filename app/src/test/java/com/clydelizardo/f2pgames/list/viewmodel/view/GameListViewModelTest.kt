@@ -28,7 +28,9 @@ class GameListViewModelTest {
                 "PC (Windows)",
                 "https://google.com",
                 false,
-                thumbnail
+                thumbnail,
+                publisher,
+                developer
             )
         )
         val viewModel = GameListViewModel {
