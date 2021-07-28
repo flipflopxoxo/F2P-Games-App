@@ -1,28 +1,28 @@
 package com.clydelizardo.f2pgames.list.repository.api.model
 
-import com.squareup.moshi.Json
+import com.google.gson.annotations.SerializedName
 
 data class GameDetail(
-    @Json(name = "short_description")
+    @SerializedName("short_description")
     val shortDescription: String = "",
-    @Json(name = "thumbnail")
+    @SerializedName("thumbnail")
     val thumbnail: String = "",
-    @Json(name = "game_url")
+    @SerializedName("game_url")
     val gameUrl: String = "",
-    @Json(name = "release_date")
+    @SerializedName("release_date")
     val releaseDate: String = "",
-    @Json(name = "freetogame_profile_url")
+    @SerializedName("freetogame_profile_url")
     val freetogameProfileUrl: String = "",
-    @Json(name = "genre")
+    @SerializedName("genre")
     val genre: String = "",
-    @Json(name = "publisher")
+    @SerializedName("publisher")
     val publisher: String = "",
-    @Json(name = "developer")
+    @SerializedName("developer")
     val developer: String = "",
-    @Json(name = "id")
+    @SerializedName("id")
     val id: Int = 0,
-    @Json(name = "title")
+    @SerializedName("title")
     val title: String = "",
-    @Json(name = "platform")
+    @SerializedName("platform")
     val platform: String = ""
 )

@@ -4,7 +4,7 @@ import com.clydelizardo.f2pgames.list.repository.api.GameDetailDAO
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
+import retrofit2.converter.gson.GsonConverterFactory
 
 @Module
 abstract class GameDetailDAOModule {
@@ -13,7 +13,7 @@ abstract class GameDetailDAOModule {
         @JvmStatic
         fun gameDetailDao(): GameDetailDAO = Retrofit.Builder()
             .baseUrl("https://www.freetogame.com/")
-            .addConverterFactory(MoshiConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(GameDetailDAO::class.java)
     }
