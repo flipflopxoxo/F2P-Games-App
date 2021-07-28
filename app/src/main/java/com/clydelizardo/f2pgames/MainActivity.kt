@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
 import com.clydelizardo.f2pgames.databinding.ActivityMainBinding
+import com.clydelizardo.f2pgames.detail.GAME_INFO
 import com.clydelizardo.f2pgames.detail.GameDetailFragment
 import com.clydelizardo.f2pgames.list.view.GameListFragment
 import com.clydelizardo.f2pgames.list.view.OnGameSelected
@@ -24,7 +25,11 @@ class MainActivity : AppCompatActivity(), OnGameSelected {
 
     override fun onGameSelected(game: GameInfo) {
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, GameDetailFragment())
+            .replace(R.id.fragment_container, GameDetailFragment().apply {
+                arguments = Bundle().apply {
+                    putParcelable(GAME_INFO, game)
+                }
+            })
             .addToBackStack("detail")
             .commit()
     }
