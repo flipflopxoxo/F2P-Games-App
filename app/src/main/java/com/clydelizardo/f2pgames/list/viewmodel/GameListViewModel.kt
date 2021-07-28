@@ -7,8 +7,9 @@ import com.clydelizardo.f2pgames.list.usecase.GetFreeGamesResult
 import com.clydelizardo.f2pgames.list.viewmodel.view.GameInfo
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class GameListViewModel(private val getFreeGames: GetFreeGames) : ViewModel() {
+class GameListViewModel @Inject constructor(private val getFreeGames: GetFreeGames) : ViewModel() {
     val listOfGames: MutableStateFlow<List<GameInfo>> = MutableStateFlow(emptyList())
 
     val _dataLoading = MutableStateFlow(false)

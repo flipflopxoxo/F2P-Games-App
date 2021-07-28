@@ -5,9 +5,10 @@ import com.clydelizardo.f2pgames.list.repository.api.GameDetailDAO
 import com.clydelizardo.f2pgames.list.viewmodel.view.GameInfo
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
+import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
-class GetFreeGamesByApi(
+class GetFreeGamesByApi @Inject constructor(
     private val repository: GameInfoRepository,
     private val context: CoroutineContext
 ) : GetFreeGames {

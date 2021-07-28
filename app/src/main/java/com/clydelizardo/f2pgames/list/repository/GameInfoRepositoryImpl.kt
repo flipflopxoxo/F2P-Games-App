@@ -1,26 +1,41 @@
 package com.clydelizardo.f2pgames.list.repository
 
 import com.clydelizardo.f2pgames.list.repository.api.GameDetailDAO
+import com.clydelizardo.f2pgames.list.repository.api.model.GameDetail
 import com.clydelizardo.f2pgames.list.viewmodel.view.GameInfo
+import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
-class GameInfoRepositoryImpl(private val gameDetailDAO: GameDetailDAO) : GameInfoRepository {
+class GameInfoRepositoryImpl @Inject constructor(private val gameDetailDAO: GameDetailDAO) :
+    GameInfoRepository {
     override suspend fun getListOfGames(): Result<List<GameInfo>> = try {
         Result.success(gameDetailDAO.getListOfFreeGames().map {
-            GameInfo(
-                it.id.toString(),
-                it.title,
-                it.shortDescription,
-                SimpleDateFormat().parse(it.releaseDate) ?: Date(0),
-                it.genre,
-                it.platform,
-                it.gameUrl,
-                false
-            )
+            it.toGameInfo()
         })
     } catch (e: Exception) {
         Result.failure(e)
     }
 }
 
+fun GameDetail.toGameInfo() =
+    GameInfo(
+        id.toString(),
+        title,
+        shortDescription,
+        date(),
+        genre,
+        platform,
+        gameUrl,
+        false
+    )
+
+private fun GameDetail.date(): Date? {
+    try {
+        return SimpleDateFormat("yyyy-MM-dd").parse(releaseDate) ?: Date(0)
+    } catch (e: ParseException) {
+
+    }
+    return null
+}

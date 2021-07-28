@@ -20,6 +20,7 @@ class GameListViewModelTest {
     fun default_instantiate_retrieveListOfGames() = runBlockingTest {
         val gameList = listOf(
             GameInfo(
+                "1",
                 "name1",
                 "desc1",
                 Date(1L),
