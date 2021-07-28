@@ -8,6 +8,7 @@ class GameEntryViewHolder(private val binding: ListItemGameInfoBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
     fun bind(gameInfo: GameInfo) {
-
+        binding.title.text = gameInfo.name
+        binding.description.text = gameInfo.description
     }
 }
