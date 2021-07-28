@@ -16,11 +16,15 @@ class GameListAdapter : ListAdapter<GameInfo, GameEntryViewHolder>(object :
         oldItem == newItem.copy(id = oldItem.id)
 
 }) {
+    var selectionListener: OnGameSelected? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GameEntryViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding =
             ListItemGameInfoBinding.inflate(layoutInflater, parent, false)
-        return GameEntryViewHolder(binding)
+        return GameEntryViewHolder(binding) {
+            selectionListener?.onGameSelected(it)
+        }
     }
 
     override fun onBindViewHolder(holder: GameEntryViewHolder, position: Int) {

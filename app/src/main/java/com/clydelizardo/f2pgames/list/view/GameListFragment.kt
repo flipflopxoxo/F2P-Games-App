@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.clydelizardo.f2pgames.databinding.FragmentGameListBinding
 import com.clydelizardo.f2pgames.di.core.DaggerAppComponent
 import com.clydelizardo.f2pgames.list.viewmodel.GameListViewModel
+import com.clydelizardo.f2pgames.list.viewmodel.view.GameInfo
 import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
 
@@ -43,6 +44,14 @@ class GameListFragment : Fragment() {
         binding.recyclerView.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         val gameListAdapter = GameListAdapter()
+        gameListAdapter.selectionListener = object : OnGameSelected {
+            override fun onGameSelected(game: GameInfo) {
+                val context = context
+                if (context is OnGameSelected) {
+                    context.onGameSelected(game)
+                }
+            }
+        }
         binding.recyclerView.adapter = gameListAdapter
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {

@@ -5,7 +5,7 @@ import com.bumptech.glide.Glide
 import com.clydelizardo.f2pgames.databinding.ListItemGameInfoBinding
 import com.clydelizardo.f2pgames.list.viewmodel.view.GameInfo
 
-class GameEntryViewHolder(private val binding: ListItemGameInfoBinding) :
+class GameEntryViewHolder(private val binding: ListItemGameInfoBinding, private val onSelect: (GameInfo) -> Unit) :
     RecyclerView.ViewHolder(binding.root) {
 
     fun bind(gameInfo: GameInfo) {
@@ -14,5 +14,8 @@ class GameEntryViewHolder(private val binding: ListItemGameInfoBinding) :
         Glide.with(binding.root)
             .load(gameInfo.thumbnail)
             .into(binding.thumbnail)
+        binding.root.setOnClickListener {
+            onSelect(gameInfo)
+        }
     }
 }
