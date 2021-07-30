@@ -1,12 +1,12 @@
 package com.clydelizardo.f2pgames.list.repository
 
-import com.clydelizardo.f2pgames.list.repository.api.model.GameDetail
+import com.clydelizardo.f2pgames.list.repository.api.model.GameEntry
 import org.junit.Test
 
 class GameInfoRepositoryImplKtTest {
     @Test
     fun validGameDetail_convertToGameInfo_returnsGameInfo() {
-        val toGameInfo = GameDetail(
+        val toGameInfo = GameEntry(
             "A free-to-play, co-op action RPG with gameplay similar to Monster Hunter.",
             id = 1,
             title = "Dauntless",

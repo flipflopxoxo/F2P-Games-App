@@ -1,10 +1,7 @@
 package com.clydelizardo.f2pgames.list.usecase
 
 import com.clydelizardo.f2pgames.list.repository.GameInfoRepository
-import com.clydelizardo.f2pgames.list.repository.api.GameDetailDAO
-import com.clydelizardo.f2pgames.list.viewmodel.view.GameInfo
 import kotlinx.coroutines.withContext
-import java.text.SimpleDateFormat
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 

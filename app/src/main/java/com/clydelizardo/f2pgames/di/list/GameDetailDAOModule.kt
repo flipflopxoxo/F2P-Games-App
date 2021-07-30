@@ -1,6 +1,6 @@
 package com.clydelizardo.f2pgames.di.list
 
-import com.clydelizardo.f2pgames.list.repository.api.GameDetailDAO
+import com.clydelizardo.f2pgames.list.repository.api.GameListDAO
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
@@ -11,10 +11,10 @@ abstract class GameDetailDAOModule {
     companion object {
         @Provides
         @JvmStatic
-        fun gameDetailDao(): GameDetailDAO = Retrofit.Builder()
+        fun gameDetailDao(): GameListDAO = Retrofit.Builder()
             .baseUrl("https://www.freetogame.com/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-            .create(GameDetailDAO::class.java)
+            .create(GameListDAO::class.java)
     }
 }
