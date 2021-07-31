@@ -1,4 +1,4 @@
-package com.clydelizardo.f2pgames.detail
+package com.clydelizardo.f2pgames.detail.view
 
 import android.os.Bundle
 import android.view.LayoutInflater
