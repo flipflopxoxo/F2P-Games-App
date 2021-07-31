@@ -8,7 +8,7 @@ import com.clydelizardo.f2pgames.detail.GAME_INFO
 import com.clydelizardo.f2pgames.detail.GameDetailFragment
 import com.clydelizardo.f2pgames.list.view.GameListFragment
 import com.clydelizardo.f2pgames.list.view.OnGameSelected
-import com.clydelizardo.f2pgames.list.viewmodel.view.GameInfo
+import com.clydelizardo.f2pgames.model.GameInfo
 
 class MainActivity : AppCompatActivity(), OnGameSelected {
     override fun onCreate(savedInstanceState: Bundle?) {

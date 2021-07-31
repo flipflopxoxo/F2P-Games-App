@@ -2,7 +2,7 @@ package com.clydelizardo.f2pgames.repository
 
 import com.clydelizardo.f2pgames.repository.api.GameListDAO
 import com.clydelizardo.f2pgames.repository.api.model.GameEntry
-import com.clydelizardo.f2pgames.list.viewmodel.view.GameInfo
+import com.clydelizardo.f2pgames.model.GameInfo
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*

@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.clydelizardo.f2pgames.databinding.ListItemGameInfoBinding
 import com.clydelizardo.f2pgames.list.view.viewholder.GameEntryViewHolder
-import com.clydelizardo.f2pgames.list.viewmodel.view.GameInfo
+import com.clydelizardo.f2pgames.model.GameInfo
 
 class GameListAdapter : ListAdapter<GameInfo, GameEntryViewHolder>(object :
     DiffUtil.ItemCallback<GameInfo>() {

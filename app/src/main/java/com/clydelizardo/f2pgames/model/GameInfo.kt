@@ -1,4 +1,4 @@
-package com.clydelizardo.f2pgames.list.viewmodel.view
+package com.clydelizardo.f2pgames.model
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize

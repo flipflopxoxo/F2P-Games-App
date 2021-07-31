@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.clydelizardo.f2pgames.databinding.FragmentGameListBinding
 import com.clydelizardo.f2pgames.di.core.DaggerAppComponent
 import com.clydelizardo.f2pgames.list.viewmodel.GameListViewModel
-import com.clydelizardo.f2pgames.list.viewmodel.view.GameInfo
+import com.clydelizardo.f2pgames.model.GameInfo
 import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
 

@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.clydelizardo.f2pgames.databinding.FragmentGameDetailBinding
-import com.clydelizardo.f2pgames.list.viewmodel.view.GameInfo
+import com.clydelizardo.f2pgames.model.GameInfo
 
 const val GAME_INFO = "game_info"
 

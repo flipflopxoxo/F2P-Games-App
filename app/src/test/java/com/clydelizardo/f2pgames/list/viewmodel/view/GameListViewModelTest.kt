@@ -3,6 +3,7 @@ package com.clydelizardo.f2pgames.list.viewmodel.view
 import com.clydelizardo.f2pgames.MainCoroutineRule
 import com.clydelizardo.f2pgames.list.usecase.GetFreeGamesResult
 import com.clydelizardo.f2pgames.list.viewmodel.GameListViewModel
+import com.clydelizardo.f2pgames.model.GameInfo
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Assert.assertEquals
