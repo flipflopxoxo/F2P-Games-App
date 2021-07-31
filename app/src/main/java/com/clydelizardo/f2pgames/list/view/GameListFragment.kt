@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.createViewModelLazy
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,6 +20,8 @@ import javax.inject.Inject
 class GameListFragment : Fragment() {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    private val viewModel: GameListViewModel by viewModels(factoryProducer = { viewModelFactory })
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,9 +40,6 @@ class GameListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val viewModel: GameListViewModel =
-            ViewModelProvider(this, viewModelFactory).get(GameListViewModel::class.java)
-
         val binding = FragmentGameListBinding.bind(view)
 
         binding.recyclerView.layoutManager =
