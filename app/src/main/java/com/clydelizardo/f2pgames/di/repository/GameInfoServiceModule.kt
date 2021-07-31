@@ -1,4 +1,4 @@
-package com.clydelizardo.f2pgames.di.list
+package com.clydelizardo.f2pgames.di.repository
 
 import com.clydelizardo.f2pgames.repository.api.GameInfoService
 import dagger.Module
@@ -7,7 +7,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 @Module
-abstract class GameDetailServiceModule {
+abstract class GameInfoServiceModule {
     companion object {
         @Provides
         @JvmStatic
