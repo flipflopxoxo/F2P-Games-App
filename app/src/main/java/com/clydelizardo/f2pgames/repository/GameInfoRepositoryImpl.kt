@@ -19,17 +19,20 @@ class GameInfoRepositoryImpl @Inject constructor(private val gameListDAO: GameLi
         Result.failure(e)
     }
 
-    override suspend fun getGameDetails(game: GameInfo): Result<GameDetail> {
-        TODO("Not yet implemented")
-    }
+    override suspend fun getGameDetails(game: GameInfo): Result<GameDetail> =
+        try {
+            Result.success(gameListDAO.getGameDetail(game.id.toInt()).toModel())
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
 }
 
-fun GameEntry.toGameInfo() =
+private fun GameEntry.toGameInfo() =
     GameInfo(
         id.toString(),
         title,
         shortDescription,
-        date(),
+        asDate(releaseDate),
         genre,
         platform,
         gameUrl,
@@ -39,11 +42,21 @@ fun GameEntry.toGameInfo() =
         developer = developer
     )
 
-private fun GameEntry.date(): Date? {
-    try {
-        return SimpleDateFormat("yyyy-MM-dd").parse(releaseDate) ?: Date(0)
-    } catch (e: ParseException) {
-
-    }
-    return null
+private fun asDate(text: String): Date {
+    return SimpleDateFormat("yyyy-MM-dd").parse(text)
+        ?: throw IllegalArgumentException("Incorrect format")
 }
+
+
+private fun com.clydelizardo.f2pgames.repository.api.model.GameDetail.toModel() = GameDetail(
+    id,
+    title,
+    description,
+    genre,
+    platform,
+    publisher,
+    asDate(releaseDate),
+    screenshots.map {
+        it.image
+    }
+)
