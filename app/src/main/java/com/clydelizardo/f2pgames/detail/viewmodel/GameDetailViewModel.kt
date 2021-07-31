@@ -8,8 +8,10 @@ import com.clydelizardo.f2pgames.model.GameDetail
 import com.clydelizardo.f2pgames.model.GameInfo
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class GameDetailViewModel(private val getGameDetail: GetGameDetail): ViewModel() {
+class GameDetailViewModel @Inject constructor(private val getGameDetail: GetGameDetail) :
+    ViewModel() {
     private val _detailFlow = MutableStateFlow<DetailState>(DetailState.Loading)
     val detail = _detailFlow.asStateFlow()
 
@@ -30,7 +32,7 @@ class GameDetailViewModel(private val getGameDetail: GetGameDetail): ViewModel()
 }
 
 sealed class DetailState {
-    class Success(val detail: GameDetail): DetailState()
-    object Loading: DetailState()
-    object Failure: DetailState()
+    class Success(val detail: GameDetail) : DetailState()
+    object Loading : DetailState()
+    object Failure : DetailState()
 }
