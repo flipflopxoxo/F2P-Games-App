@@ -5,7 +5,7 @@ import com.clydelizardo.f2pgames.repository.api.model.GameEntry
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-interface GameListDAO {
+interface GameInfoService {
     @GET("api/games")
     suspend fun getListOfFreeGames(): List<GameEntry>
 
