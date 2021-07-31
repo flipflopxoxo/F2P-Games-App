@@ -1,6 +1,6 @@
 package com.clydelizardo.f2pgames.list.usecase
 
-import com.clydelizardo.f2pgames.list.repository.GameInfoRepository
+import com.clydelizardo.f2pgames.repository.GameInfoRepository
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext

@@ -1,6 +1,6 @@
-package com.clydelizardo.f2pgames.list.repository
+package com.clydelizardo.f2pgames.repository
 
-import com.clydelizardo.f2pgames.list.repository.api.model.GameEntry
+import com.clydelizardo.f2pgames.repository.api.model.GameEntry
 import org.junit.Test
 
 class GameInfoRepositoryImplKtTest {

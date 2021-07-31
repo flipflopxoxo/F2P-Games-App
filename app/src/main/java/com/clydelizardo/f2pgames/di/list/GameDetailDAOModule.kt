@@ -1,6 +1,6 @@
 package com.clydelizardo.f2pgames.di.list
 
-import com.clydelizardo.f2pgames.list.repository.api.GameListDAO
+import com.clydelizardo.f2pgames.repository.api.GameListDAO
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit

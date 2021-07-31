@@ -1,4 +1,4 @@
-package com.clydelizardo.f2pgames.list.repository.api.model
+package com.clydelizardo.f2pgames.repository.api.model
 
 import com.google.gson.annotations.SerializedName
 
