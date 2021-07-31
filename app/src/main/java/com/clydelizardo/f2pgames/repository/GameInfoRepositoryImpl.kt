@@ -1,5 +1,6 @@
 package com.clydelizardo.f2pgames.repository
 
+import com.clydelizardo.f2pgames.model.GameDetail
 import com.clydelizardo.f2pgames.repository.api.GameListDAO
 import com.clydelizardo.f2pgames.repository.api.model.GameEntry
 import com.clydelizardo.f2pgames.model.GameInfo
@@ -16,6 +17,10 @@ class GameInfoRepositoryImpl @Inject constructor(private val gameListDAO: GameLi
         })
     } catch (e: Exception) {
         Result.failure(e)
+    }
+
+    override suspend fun getGameDetails(game: GameInfo): Result<GameDetail> {
+        TODO("Not yet implemented")
     }
 }
 
