@@ -1,7 +1,6 @@
 ext {
-    versions = [
-            lifecycle: '2.3.1',
-            room_database: '2.3.0',
-            dagger: '2.36'
-    ]
+    version_lifecycle = '2.3.1'
+    version_room_database = '2.3.0'
+    version_dagger = '2.36'
+    version_navigation = '2.3.5'
 }
