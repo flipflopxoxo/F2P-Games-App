@@ -9,6 +9,7 @@ import androidx.fragment.app.createViewModelLazy
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.clydelizardo.f2pgames.databinding.FragmentGameListBinding
 import com.clydelizardo.f2pgames.di.core.DaggerAppComponent
@@ -42,8 +43,6 @@ class GameListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val binding = FragmentGameListBinding.bind(view)
 
-        binding.recyclerView.layoutManager =
-            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         val gameListAdapter = GameListAdapter()
         gameListAdapter.selectionListener = object : OnGameSelected {
             override fun onGameSelected(game: GameInfo) {
@@ -53,7 +52,17 @@ class GameListFragment : Fragment() {
                 }
             }
         }
-        binding.recyclerView.adapter = gameListAdapter
+        binding.recyclerView.apply {
+            layoutManager =
+                LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            adapter = gameListAdapter
+            addItemDecoration(
+                DividerItemDecoration(
+                    context,
+                    DividerItemDecoration.VERTICAL
+                )
+            )
+        }
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.start()

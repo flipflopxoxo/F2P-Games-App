@@ -59,7 +59,9 @@ class GameDetailFragment : Fragment() {
                         // TODO()
                     }
                     DetailState.Loading -> {
-                        // TODO()
+                        binding.circularProgress.show()
+                        binding.circularProgress.progress = 40
+                        binding.detailGroup.visibility = View.GONE
                     }
                     is DetailState.Success -> {
                         bindDetailToView(binding, detailState.detail)
@@ -77,6 +79,7 @@ class GameDetailFragment : Fragment() {
         gameDetail: GameDetail
     ) {
         bind.apply {
+            detailGroup.visibility = View.VISIBLE
             gameDetail.screenshotUrls.firstOrNull()?.let {
                 detailThumbnail.visibility = View.VISIBLE
                 Glide.with(this@GameDetailFragment)
@@ -96,6 +99,7 @@ class GameDetailFragment : Fragment() {
                 gameDetail.developer,
                 gameDetail.releaseDate.toDisplayFormat(getLocale())
             )
+            circularProgress.hide()
         }
     }
 
