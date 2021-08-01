@@ -5,13 +5,35 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.clydelizardo.f2pgames.databinding.FragmentGameDetailBinding
+import com.clydelizardo.f2pgames.detail.viewmodel.DetailState
+import com.clydelizardo.f2pgames.detail.viewmodel.GameDetailViewModel
+import com.clydelizardo.f2pgames.di.core.DaggerAppComponent
+import com.clydelizardo.f2pgames.model.GameDetail
 import com.clydelizardo.f2pgames.model.GameInfo
+import com.clydelizardo.f2pgames.util.toDisplayFormat
+import kotlinx.coroutines.flow.collect
+import javax.inject.Inject
 
 const val GAME_INFO = "game_info"
 
 class GameDetailFragment : Fragment() {
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    val viewModel: GameDetailViewModel by viewModels(factoryProducer = { viewModelFactory })
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        DaggerAppComponent.builder()
+            .build()
+            .inject(this)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -22,18 +44,55 @@ class GameDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val bind = FragmentGameDetailBinding.bind(view)
-        val toGameInfo: GameInfo? = arguments?.get(GAME_INFO) as GameInfo?
-        if (toGameInfo != null) {
-            bind.apply {
-                Glide.with(this@GameDetailFragment)
-                    .load(toGameInfo.thumbnail)
-                    .into(detailThumbnail)
-                detailName.text = toGameInfo.name
-                detailDescription.text = toGameInfo.description
-                detailExtraInfo.text =
-                    "Genre: ${toGameInfo.genre}\nPlatform: ${toGameInfo.platform}\nPublisher: ${toGameInfo.publisher}\nDeveloper: ${toGameInfo.developer})}"
+        val binding = FragmentGameDetailBinding.bind(view)
+        val gameInfo: GameInfo? = arguments?.get(GAME_INFO) as GameInfo
+        if (gameInfo != null) {
+            viewModel.setGame(gameInfo)
+        }
+        viewLifecycleOwner.lifecycleScope.launchWhenResumed {
+            viewModel.detail.collect { detailState ->
+                when (detailState) {
+                    DetailState.Failure -> {
+                        // TODO()
+                    }
+                    DetailState.Loading -> {
+                        // TODO()
+                    }
+                    is DetailState.Success -> {
+                        bindDetailToView(binding, detailState.detail)
+                    }
+                }
             }
+        }
+        if (gameInfo != null) {
+
+        }
+    }
+
+    private fun bindDetailToView(
+        bind: FragmentGameDetailBinding,
+        gameDetail: GameDetail
+    ) {
+        bind.apply {
+            gameDetail.screenshotUrls.firstOrNull()?.let {
+                detailThumbnail.visibility = View.VISIBLE
+                Glide.with(this@GameDetailFragment)
+                    .load(it)
+                    .into(detailThumbnail)
+            } ?: run {
+                detailThumbnail.visibility = View.GONE
+            }
+
+            detailName.text = gameDetail.title
+            detailDescription.text = gameDetail.description
+            detailExtraInfo.text =
+                """
+                                    Genre: ${gameDetail.genre}
+                                    Platform: ${gameDetail.platform}
+                                    Publisher: ${gameDetail.publisher}
+                                    Developer: ${gameDetail.developer}
+                                    Release Date: ${gameDetail.releaseDate.toDisplayFormat()}
+                                    """.trimIndent()
         }
     }
 }

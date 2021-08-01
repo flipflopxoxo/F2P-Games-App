@@ -48,14 +48,15 @@ private fun asDate(text: String): Date {
 
 
 private fun com.clydelizardo.f2pgames.repository.api.model.GameDetail.toModel() = GameDetail(
-    id,
-    title,
-    description,
-    genre,
-    platform,
-    publisher,
-    asDate(releaseDate),
-    screenshots.map {
+    id = id,
+    title = title,
+    description = description,
+    genre = genre,
+    platform = platform,
+    publisher = publisher,
+    releaseDate = asDate(releaseDate),
+    screenshotUrls = screenshots.map {
         it.image
-    }
+    },
+    developer = developer
 )
