@@ -1,5 +1,6 @@
 package com.clydelizardo.f2pgames.detail.view
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
+import com.clydelizardo.f2pgames.R
 import com.clydelizardo.f2pgames.databinding.FragmentGameDetailBinding
 import com.clydelizardo.f2pgames.detail.viewmodel.DetailState
 import com.clydelizardo.f2pgames.detail.viewmodel.GameDetailViewModel
@@ -17,6 +19,7 @@ import com.clydelizardo.f2pgames.model.GameDetail
 import com.clydelizardo.f2pgames.model.GameInfo
 import com.clydelizardo.f2pgames.util.toDisplayFormat
 import kotlinx.coroutines.flow.collect
+import java.util.*
 import javax.inject.Inject
 
 const val GAME_INFO = "game_info"
@@ -85,14 +88,21 @@ class GameDetailFragment : Fragment() {
 
             detailName.text = gameDetail.title
             detailDescription.text = gameDetail.description
-            detailExtraInfo.text =
-                """
-                                    Genre: ${gameDetail.genre}
-                                    Platform: ${gameDetail.platform}
-                                    Publisher: ${gameDetail.publisher}
-                                    Developer: ${gameDetail.developer}
-                                    Release Date: ${gameDetail.releaseDate.toDisplayFormat()}
-                                    """.trimIndent()
+            detailExtraInfo.text = resources.getString(
+                R.string.game_details_spec,
+                gameDetail.genre,
+                gameDetail.platform,
+                gameDetail.publisher,
+                gameDetail.developer,
+                gameDetail.releaseDate.toDisplayFormat(getLocale())
+            )
         }
     }
+
+    private fun getLocale() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        resources.configuration.locales[0]
+    } else {
+        resources.configuration.locale
+    }
+
 }

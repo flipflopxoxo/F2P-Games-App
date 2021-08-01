@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">F2P Games</string>
+    <string name="game_details_spec">Genre: %s\nPlatforn: %s\nPublisher: %s\nDeveloper: %s\nRelease date: %s</string>
 </resources>
