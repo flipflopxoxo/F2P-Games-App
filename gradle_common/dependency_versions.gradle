@@ -1,0 +1,7 @@
+ext {
+    versions = [
+            lifecycle: '2.3.1',
+            romm_databse: '2.3.0',
+            dagger: '2.36'
+    ]
+}
