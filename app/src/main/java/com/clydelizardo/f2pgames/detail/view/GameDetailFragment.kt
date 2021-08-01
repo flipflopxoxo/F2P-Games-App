@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.clydelizardo.f2pgames.R
 import com.clydelizardo.f2pgames.databinding.FragmentGameDetailBinding
@@ -22,13 +23,13 @@ import kotlinx.coroutines.flow.collect
 import java.util.*
 import javax.inject.Inject
 
-const val GAME_INFO = "game_info"
-
 class GameDetailFragment : Fragment() {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
     val viewModel: GameDetailViewModel by viewModels(factoryProducer = { viewModelFactory })
+
+    val args: GameDetailFragmentArgs by navArgs()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,10 +49,10 @@ class GameDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val binding = FragmentGameDetailBinding.bind(view)
-        val gameInfo: GameInfo? = arguments?.get(GAME_INFO) as GameInfo
-        if (gameInfo != null) {
-            viewModel.setGame(gameInfo)
-        }
+
+        val gameInfo: GameInfo = args.gameInfo
+        viewModel.setGame(gameInfo)
+
         viewLifecycleOwner.lifecycleScope.launchWhenResumed {
             viewModel.detail.collect { detailState ->
                 when (detailState) {
@@ -68,9 +69,6 @@ class GameDetailFragment : Fragment() {
                     }
                 }
             }
-        }
-        if (gameInfo != null) {
-
         }
     }
 
