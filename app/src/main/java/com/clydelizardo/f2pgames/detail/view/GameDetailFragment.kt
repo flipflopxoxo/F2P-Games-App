@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
+import com.clydelizardo.f2pgames.GameApplication
 import com.clydelizardo.f2pgames.R
 import com.clydelizardo.f2pgames.databinding.FragmentGameDetailBinding
 import com.clydelizardo.f2pgames.detail.viewmodel.DetailState
@@ -33,9 +34,8 @@ class GameDetailFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        DaggerAppComponent.builder()
-            .build()
-            .inject(this)
+        (context?.applicationContext as GameApplication?)?.component?.gameDetailComponent()?.create()
+            ?.inject(this)
     }
 
     override fun onCreateView(

@@ -13,5 +13,4 @@ interface GameDetailViewModelModule {
     @IntoMap
     @ViewModelKey(GameDetailViewModel::class)
     fun viewModel(viewModel: GameDetailViewModel): ViewModel
-
 }

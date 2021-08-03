@@ -5,14 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.createViewModelLazy
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.clydelizardo.f2pgames.GameApplication
 import com.clydelizardo.f2pgames.databinding.FragmentGameListBinding
-import com.clydelizardo.f2pgames.di.core.DaggerAppComponent
 import com.clydelizardo.f2pgames.list.viewmodel.GameListViewModel
 import com.clydelizardo.f2pgames.model.GameInfo
 import kotlinx.coroutines.flow.collect
@@ -26,9 +25,8 @@ class GameListFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        DaggerAppComponent.builder()
-            .build()
-            .inject(this)
+        (context?.applicationContext as GameApplication?)?.component?.gameListComponent()?.create()
+            ?.inject(this)
     }
 
     override fun onCreateView(
