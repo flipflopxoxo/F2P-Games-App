@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2021 Clyde Lizardo
+ */
+
 package com.clydelizardo.f2pgames.repository
 
 import com.clydelizardo.f2pgames.model.GameDetail
@@ -20,7 +24,7 @@ class GameInfoRepositoryImpl @Inject constructor(private val gameInfoService: Ga
 
     override suspend fun getGameDetails(game: GameInfo): Result<GameDetail> =
         try {
-            Result.success(gameInfoService.getGameDetail(game.id.toInt()).toModel())
+            Result.success(gameInfoService.getGameDetail(game.id).toModel())
         } catch (e: Exception) {
             Result.failure(e)
         }
@@ -28,7 +32,7 @@ class GameInfoRepositoryImpl @Inject constructor(private val gameInfoService: Ga
 
 private fun GameEntry.toGameInfo() =
     GameInfo(
-        id.toString(),
+        id,
         title,
         shortDescription,
         asDate(releaseDate),

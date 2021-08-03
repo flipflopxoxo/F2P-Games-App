@@ -6,7 +6,7 @@ import java.util.*
 
 @Parcelize
 data class GameInfo(
-    val id: String,
+    val id: Int,
     val name: String,
     val description: String,
     val releaseDate: Date?,
