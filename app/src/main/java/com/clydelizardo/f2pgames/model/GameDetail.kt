@@ -11,5 +11,6 @@ data class GameDetail(
     val publisher: String,
     val releaseDate: Date,
     val screenshotUrls: List<String>,
-    val developer: String
+    val developer: String,
+    val shortDescription: String
 )

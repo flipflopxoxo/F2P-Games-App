@@ -62,5 +62,6 @@ private fun com.clydelizardo.f2pgames.repository.api.model.GameDetail.toModel() 
     screenshotUrls = screenshots.map {
         it.image
     },
-    developer = developer
+    developer = developer,
+    shortDescription = shortDescription
 )
