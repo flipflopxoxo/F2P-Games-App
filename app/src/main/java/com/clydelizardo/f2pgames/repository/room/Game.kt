@@ -8,13 +8,13 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.util.*
 
-@Entity
-data class GameInfoEntity(
-    @PrimaryKey val id: String,
+@Entity(tableName = "favorite_games")
+data class Game(
+    @PrimaryKey val id: Int,
     val name: String,
     val description: String,
     val shortDescription: String,
-    val releaseDate: Date?,
+    val releaseDate: Long?,
     val genre: String,
     val platform: String,
     val link: String,
