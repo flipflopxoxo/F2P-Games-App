@@ -2,7 +2,7 @@
  * Copyright (c) 2021 Clyde Lizardo
  */
 
-package com.clydelizardo.f2pgames.repository.room
+package com.clydelizardo.f2pgames.repository.room.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

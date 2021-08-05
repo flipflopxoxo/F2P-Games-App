@@ -6,6 +6,7 @@ package com.clydelizardo.f2pgames.repository.room
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import com.clydelizardo.f2pgames.repository.room.model.Game
 
 @Entity(primaryKeys = ["gameId", "number"],
 foreignKeys = [ForeignKey(entity = Game::class, parentColumns = ["id"], childColumns = ["gameId"])])

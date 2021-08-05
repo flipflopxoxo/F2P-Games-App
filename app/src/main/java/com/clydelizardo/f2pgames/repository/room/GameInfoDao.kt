@@ -5,17 +5,19 @@
 package com.clydelizardo.f2pgames.repository.room
 
 import androidx.room.*
+import com.clydelizardo.f2pgames.repository.room.model.Game
+import com.clydelizardo.f2pgames.repository.room.model.GameWithScreenshots
 
 @Dao
 abstract class GameInfoDao {
-    @Query("SELECT * from favorite_games")
-    abstract suspend fun getFavorites(): List<Game>
-
     @Insert
-    abstract suspend fun addToFavorite(entity: Game)
+    protected abstract suspend fun addToFavorite(entity: Game)
 
     @Delete
-    abstract suspend fun removeFromFavorite(entity: Game)
+    protected abstract suspend fun removeFromFavorite(entity: Game)
+
+    @Query("DELETE from favorite_games WHERE id = :gameId")
+    abstract suspend fun removeFromFavorite(gameId: Int)
 
     @Transaction
     @Query("SELECT * from favorite_games")
@@ -34,9 +36,9 @@ abstract class GameInfoDao {
     }
 
     @Transaction
-    open suspend fun removeGameFromFavorite(game: Game) {
-        removeFromFavorite(game)
-        deleteScreenshotsForGame(game.id)
+    open suspend fun removeGameFromFavorite(gameId: Int) {
+        removeFromFavorite(gameId)
+        deleteScreenshotsForGame(gameId)
     }
 
     @Query("SELECT * from favorite_games WHERE id = :gameId")

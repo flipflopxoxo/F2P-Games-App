@@ -9,9 +9,11 @@ import androidx.room.Room
 import com.clydelizardo.f2pgames.repository.room.AppDatabase
 import dagger.Module
 import dagger.Provides
+import javax.inject.Singleton
 
 @Module
 class AppDatabaseModule {
+    @Singleton
     @Provides
     fun database(appContext: Application): AppDatabase {
         return Room.databaseBuilder(appContext, AppDatabase::class.java, "free_games_db")

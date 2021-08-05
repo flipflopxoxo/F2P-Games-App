@@ -12,5 +12,8 @@ data class GameDetail(
     val releaseDate: Date,
     val screenshotUrls: List<String>,
     val developer: String,
-    val shortDescription: String
+    val shortDescription: String,
+    val link: String,
+    val thumbnail: String,
+    val isFavorite: Boolean = false
 )
