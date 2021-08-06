@@ -7,11 +7,12 @@
         <entry key="..\:/Users/clyde/AndroidStudioProjects/F2P-Games-App/app/src/main/res/layout/fragment_game_detail.xml" value="0.14427083333333332" />
         <entry key="..\:/Users/clyde/AndroidStudioProjects/F2P-Games-App/app/src/main/res/layout/fragment_game_details.xml" value="0.18885869565217392" />
         <entry key="..\:/Users/clyde/AndroidStudioProjects/F2P-Games-App/app/src/main/res/layout/list_item_game_info.xml" value="0.1578125" />
+        <entry key="..\:/Users/clyde/AndroidStudioProjects/SampleApp/app/src/main/res/layout/fragment_game_list.xml" value="0.10520833333333333" />
         <entry key="..\:/Users/clyde/AndroidStudioProjects/SampleApp/app/src/main/res/layout/list_item_game_info.xml" value="0.3645833333333333" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

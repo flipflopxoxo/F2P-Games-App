@@ -13,8 +13,10 @@ import com.clydelizardo.f2pgames.repository.room.GameInfoDao
 import com.clydelizardo.f2pgames.repository.room.toGameAndScreenshot
 import java.util.*
 import javax.inject.Inject
+import javax.inject.Singleton
 import kotlin.Exception
 
+@Singleton
 class GameInfoWithFavoritesRepository @Inject constructor(
     private val service: GameInfoService,
     private val dao: GameInfoDao
@@ -38,8 +40,8 @@ class GameInfoWithFavoritesRepository @Inject constructor(
     }
 
     override suspend fun addGameToFavorites(gameId: Int): Boolean {
-        val gameDetail = service.getGameDetail(gameId).toModel()
         return try {
+            val gameDetail = service.getGameDetail(gameId).toModel()
             addGameToFavorites(gameDetail)
             true
         } catch (_: Exception) {
@@ -48,9 +50,9 @@ class GameInfoWithFavoritesRepository @Inject constructor(
     }
 
     override suspend fun addGameToFavorites(game: GameDetail): Boolean {
-        val (game, screenshotList) = game.toGameAndScreenshot()
+        val (gameEntity, screenshotList) = game.toGameAndScreenshot()
         return try {
-            dao.addGameToFavorite(game, screenshotList)
+            dao.addGameToFavorite(gameEntity, screenshotList)
             true
         } catch (_: Exception) {
             false

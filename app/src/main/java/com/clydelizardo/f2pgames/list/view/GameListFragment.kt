@@ -68,35 +68,59 @@ class GameListFragment : Fragment() {
                 )
             )
         }
+        binding.refreshLayout.setOnRefreshListener {
+            if (!viewModel.refresh()) {
+                binding.refreshLayout.isRefreshing = false
+            }
+        }
 
         viewLifecycleOwner.lifecycleScope.launchWhenResumed {
             viewModel.state.collect {
                 when (it) {
                     is GameListState.FailedRefresh -> {
                         gameListAdapter.submitList(it.gameList)
-                        Toast.makeText(context, "Failed to refresh", Toast.LENGTH_SHORT)
+                        binding.refreshLayout.isEnabled = false
+                        binding.refreshLayout.isRefreshing = false
+                        Toast.makeText(context, "Failed to refresh", Toast.LENGTH_LONG).show()
                         viewModel.removeFailedState()
                     }
                     is GameListState.FailedUpdate -> {
                         gameListAdapter.submitList(it.gameList)
-                        Toast.makeText(context, "Failed to update favorite states", Toast.LENGTH_SHORT)
+                        binding.refreshLayout.isEnabled = false
+                        binding.refreshLayout.isRefreshing = false
+                        Toast.makeText(
+                            context,
+                            "Failed to update favorite states",
+                            Toast.LENGTH_LONG
+                        ).show()
                         viewModel.removeFailedState()
                     }
                     GameListState.Failure -> {
                         gameListAdapter.submitList(emptyList())
+                        binding.refreshLayout.isEnabled = true
+                        binding.refreshLayout.isRefreshing = false
                         Toast.makeText(context, "Failed to retrieve games", Toast.LENGTH_SHORT)
+                            .show()
                     }
                     GameListState.Loading -> {
                         gameListAdapter.submitList(emptyList())
+                        binding.refreshLayout.isEnabled = true
+                        binding.refreshLayout.isRefreshing = true
                     }
                     is GameListState.Refreshing -> {
                         gameListAdapter.submitList(it.gameList)
+                        binding.refreshLayout.isEnabled = true
+                        binding.refreshLayout.isRefreshing = true
                     }
                     is GameListState.Success -> {
                         gameListAdapter.submitList(it.gameList)
+                        binding.refreshLayout.isEnabled = true
+                        binding.refreshLayout.isRefreshing = false
                     }
                     is GameListState.Updating -> {
                         gameListAdapter.submitList(it.gameList)
+                        binding.refreshLayout.isEnabled = true
+                        binding.refreshLayout.isRefreshing = true
                     }
                 }
             }
