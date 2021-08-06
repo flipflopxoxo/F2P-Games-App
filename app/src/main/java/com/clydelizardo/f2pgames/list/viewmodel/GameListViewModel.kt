@@ -2,31 +2,132 @@ package com.clydelizardo.f2pgames.list.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.clydelizardo.f2pgames.list.usecase.ChangeGameFavoriteStatus
+import com.clydelizardo.f2pgames.list.usecase.FavoriteStatusResult
 import com.clydelizardo.f2pgames.list.usecase.GetFreeGames
 import com.clydelizardo.f2pgames.list.usecase.GetFreeGamesResult
 import com.clydelizardo.f2pgames.model.GameInfo
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class GameListViewModel @Inject constructor(private val getFreeGames: GetFreeGames) : ViewModel() {
+class GameListViewModel @Inject constructor(
+    private val getFreeGames: GetFreeGames,
+    private val changeGameFavoriteStatus: ChangeGameFavoriteStatus
+) : ViewModel() {
     val listOfGames: MutableStateFlow<List<GameInfo>> = MutableStateFlow(emptyList())
 
-    val _dataLoading = MutableStateFlow(false)
+    private val _state = MutableStateFlow<GameListState>(GameListState.Loading)
+    val state = _state.asStateFlow()
 
-    fun start() {
-        if (_dataLoading.compareAndSet(expect = false, update = true)) {
+    init {
+        doInitialLoad()
+    }
+
+    private fun doInitialLoad() {
+        viewModelScope.launch {
+            val freeGames = getFreeGames()
+            _state.value = when (freeGames) {
+                is GetFreeGamesResult.Success -> GameListState.Success(freeGames.list)
+                else -> GameListState.Failure
+            }
+        }
+    }
+
+    fun refresh(): Boolean {
+        return when {
+            _state.compareAndTransform({ it is GameListState.Success }) {
+                GameListState.Refreshing((it as GameListState.Success).gameList)
+            } -> {
+                doRefresh()
+                true
+            }
+            _state.compareAndTransform({ it is GameListState.Failure }) {
+                GameListState.Loading
+            } -> {
+                doInitialLoad()
+                true
+            }
+            else -> {
+                false
+            }
+        }
+    }
+
+    private fun doRefresh() {
+        viewModelScope.launch {
+            val oldList = (_state.value as GameListState.Refreshing).gameList
+            val freeGames = getFreeGames()
+            _state.value = when (freeGames) {
+                is GetFreeGamesResult.Success -> GameListState.Success(freeGames.list)
+                else -> GameListState.FailedRefresh(oldList)
+            }
+        }
+    }
+
+    fun removeFailedState() {
+        _state.compareAndTransform({
+            it is GameListState.FailedRefresh || it is GameListState.FailedUpdate
+        }) {
+            val oldList = when (it) {
+                is GameListState.FailedRefresh -> it.gameList
+                is GameListState.FailedUpdate -> it.gameList
+                else -> throw IllegalStateException()
+            }
+            GameListState.Success(oldList)
+        }
+    }
+
+    fun toggleFavoriteState(gameInfo: GameInfo) {
+        if (_state.compareAndTransform({ it is GameListState.Success }) {
+                GameListState.Updating((it as GameListState.Success).gameList)
+            }) {
             viewModelScope.launch {
-                try {
-                    val freeGames = getFreeGames()
-                    when (freeGames) {
-                        is GetFreeGamesResult.Success -> listOfGames.value = freeGames.list
-                        else -> listOfGames.value = emptyList()
+                val oldList = (_state.value as GameListState.Updating).gameList
+                val favoriteStatusResult = changeGameFavoriteStatus(gameInfo, !gameInfo.isFavorite)
+                _state.value = when (favoriteStatusResult) {
+                    is FavoriteStatusResult.Success -> {
+                        val updatedGameInfo = favoriteStatusResult.updatedGameInfo
+                        GameListState.Success(
+                            oldList.map {
+                                if (it.id == updatedGameInfo.id) {
+                                    updatedGameInfo
+                                } else {
+                                    it
+                                }
+                            }
+                        )
                     }
-                } finally {
-                    _dataLoading.value = false
+                    FavoriteStatusResult.Failure -> {
+                        GameListState.FailedUpdate(oldList)
+                    }
                 }
             }
+        }
+    }
+}
+
+sealed class GameListState {
+    object Loading : GameListState()
+    object Failure : GameListState()
+    data class Success(val gameList: List<GameInfo>) : GameListState()
+    data class Refreshing(val gameList: List<GameInfo>) : GameListState()
+    data class Updating(val gameList: List<GameInfo>) : GameListState()
+    data class FailedRefresh(val gameList: List<GameInfo>) : GameListState()
+    data class FailedUpdate(val gameList: List<GameInfo>) : GameListState()
+}
+
+fun <T> MutableStateFlow<T>.compareAndTransform(
+    predicate: (T) -> Boolean,
+    transform: (T) -> T
+): Boolean {
+    return synchronized(this) {
+        if (predicate(this.value)) {
+            value = transform(this.value)
+            true
+        } else {
+            false
         }
     }
 }

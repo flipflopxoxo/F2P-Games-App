@@ -10,7 +10,7 @@ import com.clydelizardo.f2pgames.repository.room.model.GameWithScreenshots
 
 @Dao
 abstract class GameInfoDao {
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     protected abstract suspend fun addToFavorite(entity: Game)
 
     @Delete
@@ -38,7 +38,6 @@ abstract class GameInfoDao {
     @Transaction
     open suspend fun removeGameFromFavorite(gameId: Int) {
         removeFromFavorite(gameId)
-        deleteScreenshotsForGame(gameId)
     }
 
     @Query("SELECT * from favorite_games WHERE id = :gameId")

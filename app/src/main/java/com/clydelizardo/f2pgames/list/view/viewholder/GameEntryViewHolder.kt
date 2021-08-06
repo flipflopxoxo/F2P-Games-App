@@ -1,5 +1,6 @@
 package com.clydelizardo.f2pgames.list.view.viewholder
 
+import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.clydelizardo.f2pgames.databinding.ListItemGameInfoBinding
@@ -24,6 +25,11 @@ class GameEntryViewHolder(
         binding.root.setOnLongClickListener {
             onLongPress(gameInfo)
             true
+        }
+        binding.favoriteIndicator.visibility = if (gameInfo.isFavorite) {
+            View.VISIBLE
+        } else {
+            View.GONE
         }
     }
 }
