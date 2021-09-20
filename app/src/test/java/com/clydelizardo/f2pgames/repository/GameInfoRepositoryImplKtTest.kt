@@ -1,6 +1,7 @@
 package com.clydelizardo.f2pgames.repository
 
 import com.clydelizardo.f2pgames.repository.api.model.GameEntry
+import com.clydelizardo.f2pgames.repository.api.toGameInfo
 import org.junit.Test
 
 class GameInfoRepositoryImplKtTest {

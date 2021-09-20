@@ -5,11 +5,13 @@ import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Singleton
 
 @Module
 abstract class GameInfoServiceModule {
     companion object {
         @Provides
+        @Singleton
         @JvmStatic
         fun gameInfoService(): GameInfoService = Retrofit.Builder()
             .baseUrl("https://www.freetogame.com/")

@@ -51,12 +51,14 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$version_lifecycle"
     implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:$version_lifecycle"
 
-    implementation("androidx.navigation:navigation-fragment-ktx:$version_navigation")
-    implementation("androidx.navigation:navigation-ui-ktx:$version_navigation")
+    implementation "androidx.navigation:navigation-fragment-ktx:$version_navigation"
+    implementation "androidx.navigation:navigation-ui-ktx:$version_navigation"
 
     implementation "androidx.activity:activity-ktx:1.3.0"
-    implementation("androidx.fragment:fragment-ktx:1.3.6")
+    implementation "androidx.fragment:fragment-ktx:1.3.6"
     implementation "androidx.recyclerview:recyclerview:1.2.1"
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+
 
     implementation "androidx.room:room-runtime:$version_room_database"
     annotationProcessor "androidx.room:room-compiler:$version_room_database"

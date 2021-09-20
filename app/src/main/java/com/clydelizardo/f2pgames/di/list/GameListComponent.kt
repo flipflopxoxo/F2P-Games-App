@@ -6,10 +6,13 @@ import com.clydelizardo.f2pgames.list.view.GameListFragment
 import dagger.Module
 import dagger.Subcomponent
 
-@Subcomponent(modules = [
-    GetFreeGamesModule::class,
-    GameListViewModelModule::class
-])
+@Subcomponent(
+    modules = [
+        GetFreeGamesModule::class,
+        GameListViewModelModule::class,
+        FavoriteStatusModule::class
+    ]
+)
 interface GameListComponent {
     fun inject(fragment: GameListFragment)
 
