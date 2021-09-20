@@ -1,12 +1,13 @@
 package com.clydelizardo.f2pgames.di.core
 
 import android.app.Application
-import com.clydelizardo.f2pgames.detail.view.GameDetailFragment
 import com.clydelizardo.f2pgames.di.core.viewmodel.ViewModelFactoryModule
 import com.clydelizardo.f2pgames.di.detail.GameDetailsComponent
 import com.clydelizardo.f2pgames.di.list.GameListComponent
-import com.clydelizardo.f2pgames.di.repository.*
-import com.clydelizardo.f2pgames.list.view.GameListFragment
+import com.clydelizardo.f2pgames.di.repository.AppDatabaseModule
+import com.clydelizardo.f2pgames.di.repository.GameInfoDaoModule
+import com.clydelizardo.f2pgames.di.repository.GameInfoFavoritesRepositoryModule
+import com.clydelizardo.f2pgames.di.repository.GameInfoServiceModule
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjectionModule
