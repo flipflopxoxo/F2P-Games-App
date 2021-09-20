@@ -9,13 +9,14 @@ import com.clydelizardo.f2pgames.di.repository.*
 import com.clydelizardo.f2pgames.list.view.GameListFragment
 import dagger.BindsInstance
 import dagger.Component
+import dagger.android.AndroidInjectionModule
 import javax.inject.Singleton
 
 @Singleton
 @Component(
     modules = [AppDatabaseModule::class, ViewModelFactoryModule::class,
         GameInfoFavoritesRepositoryModule::class, GameInfoServiceModule::class,
-        GameInfoDaoModule::class]
+        GameInfoDaoModule::class, AndroidInjectionModule::class]
 )
 interface AppComponent {
     fun gameListComponent(): GameListComponent.Factory
