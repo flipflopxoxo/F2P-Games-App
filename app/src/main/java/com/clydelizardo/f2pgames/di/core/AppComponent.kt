@@ -1,9 +1,8 @@
 package com.clydelizardo.f2pgames.di.core
 
 import android.app.Application
+import com.clydelizardo.f2pgames.GameApplication
 import com.clydelizardo.f2pgames.di.core.viewmodel.ViewModelFactoryModule
-import com.clydelizardo.f2pgames.di.detail.GameDetailsComponent
-import com.clydelizardo.f2pgames.di.list.GameListComponent
 import com.clydelizardo.f2pgames.di.repository.AppDatabaseModule
 import com.clydelizardo.f2pgames.di.repository.GameInfoDaoModule
 import com.clydelizardo.f2pgames.di.repository.GameInfoFavoritesRepositoryModule
@@ -17,11 +16,11 @@ import javax.inject.Singleton
 @Component(
     modules = [AppDatabaseModule::class, ViewModelFactoryModule::class,
         GameInfoFavoritesRepositoryModule::class, GameInfoServiceModule::class,
-        GameInfoDaoModule::class, AndroidInjectionModule::class]
+        GameInfoDaoModule::class, AndroidInjectionModule::class, MainActivityModule::class,
+        FragmentsModule::class]
 )
 interface AppComponent {
-    fun gameListComponent(): GameListComponent.Factory
-    fun gameDetailComponent(): GameDetailsComponent.Factory
+    fun inject(application: GameApplication)
 
     @Component.Builder
     interface Builder {

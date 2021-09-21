@@ -1,5 +1,6 @@
 package com.clydelizardo.f2pgames.detail.view
 
+import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,20 +12,26 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
-import com.clydelizardo.f2pgames.GameApplication
 import com.clydelizardo.f2pgames.R
 import com.clydelizardo.f2pgames.databinding.FragmentGameDetailBinding
 import com.clydelizardo.f2pgames.detail.viewmodel.DetailState
 import com.clydelizardo.f2pgames.detail.viewmodel.GameDetailViewModel
-import com.clydelizardo.f2pgames.di.core.DaggerAppComponent
 import com.clydelizardo.f2pgames.model.GameDetail
 import com.clydelizardo.f2pgames.model.GameInfo
 import com.clydelizardo.f2pgames.util.toDisplayFormat
+import dagger.android.AndroidInjection
+import dagger.android.AndroidInjector
+import dagger.android.DispatchingAndroidInjector
+import dagger.android.HasAndroidInjector
+import dagger.android.support.AndroidSupportInjection
 import kotlinx.coroutines.flow.collect
 import java.util.*
 import javax.inject.Inject
 
-class GameDetailFragment : Fragment() {
+class GameDetailFragment : Fragment(), HasAndroidInjector {
+    @Inject
+    lateinit var androidInjector: DispatchingAndroidInjector<Any>
+
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
@@ -32,10 +39,9 @@ class GameDetailFragment : Fragment() {
 
     val args: GameDetailFragmentArgs by navArgs()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        (context?.applicationContext as GameApplication?)?.component?.gameDetailComponent()?.create()
-            ?.inject(this)
+    override fun onAttach(context: Context) {
+        AndroidSupportInjection.inject(this)
+        super.onAttach(context)
     }
 
     override fun onCreateView(
@@ -105,6 +111,10 @@ class GameDetailFragment : Fragment() {
         resources.configuration.locales[0]
     } else {
         resources.configuration.locale
+    }
+
+    override fun androidInjector(): AndroidInjector<Any> {
+        return androidInjector
     }
 
 }
