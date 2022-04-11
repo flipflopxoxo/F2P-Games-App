@@ -6,10 +6,12 @@ import com.clydelizardo.f2pgames.detail.usecase.GetGameDetail
 import com.clydelizardo.f2pgames.detail.usecase.GetGameDetailResult
 import com.clydelizardo.f2pgames.model.GameDetail
 import com.clydelizardo.f2pgames.model.GameInfo
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 class GameDetailViewModel @Inject constructor(private val getGameDetail: GetGameDetail) :
     ViewModel() {
     private val _detailFlow = MutableStateFlow<DetailState>(DetailState.Loading)
