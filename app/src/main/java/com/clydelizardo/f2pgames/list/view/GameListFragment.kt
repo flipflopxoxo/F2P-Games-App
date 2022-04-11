@@ -13,6 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.clydelizardo.f2pgames.databinding.FragmentGameListBinding
+import com.clydelizardo.f2pgames.di.core.BaseFragment
 import com.clydelizardo.f2pgames.list.viewmodel.GameListState
 import com.clydelizardo.f2pgames.list.viewmodel.GameListViewModel
 import com.clydelizardo.f2pgames.model.GameInfo
@@ -23,19 +24,9 @@ import dagger.android.support.AndroidSupportInjection
 import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
 
-class GameListFragment : Fragment(), HasAndroidInjector {
-    @Inject
-    lateinit var androidInjector: DispatchingAndroidInjector<Any>
+class GameListFragment : BaseFragment() {
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-
-    private val viewModel: GameListViewModel by viewModels(factoryProducer = { viewModelFactory })
-
-    override fun onAttach(context: Context) {
-        AndroidSupportInjection.inject(this)
-        super.onAttach(context)
-    }
+    private val viewModel: GameListViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,

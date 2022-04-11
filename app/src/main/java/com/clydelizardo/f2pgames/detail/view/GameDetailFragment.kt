@@ -16,6 +16,7 @@ import com.clydelizardo.f2pgames.R
 import com.clydelizardo.f2pgames.databinding.FragmentGameDetailBinding
 import com.clydelizardo.f2pgames.detail.viewmodel.DetailState
 import com.clydelizardo.f2pgames.detail.viewmodel.GameDetailViewModel
+import com.clydelizardo.f2pgames.di.core.BaseFragment
 import com.clydelizardo.f2pgames.model.GameDetail
 import com.clydelizardo.f2pgames.model.GameInfo
 import com.clydelizardo.f2pgames.util.toDisplayFormat
@@ -28,21 +29,11 @@ import kotlinx.coroutines.flow.collect
 import java.util.*
 import javax.inject.Inject
 
-class GameDetailFragment : Fragment(), HasAndroidInjector {
-    @Inject
-    lateinit var androidInjector: DispatchingAndroidInjector<Any>
+class GameDetailFragment : BaseFragment() {
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-
-    val viewModel: GameDetailViewModel by viewModels(factoryProducer = { viewModelFactory })
+    val viewModel: GameDetailViewModel by viewModels()
 
     val args: GameDetailFragmentArgs by navArgs()
-
-    override fun onAttach(context: Context) {
-        AndroidSupportInjection.inject(this)
-        super.onAttach(context)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -112,9 +103,4 @@ class GameDetailFragment : Fragment(), HasAndroidInjector {
     } else {
         resources.configuration.locale
     }
-
-    override fun androidInjector(): AndroidInjector<Any> {
-        return androidInjector
-    }
-
 }
