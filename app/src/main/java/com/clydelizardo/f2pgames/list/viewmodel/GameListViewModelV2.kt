@@ -8,6 +8,7 @@ import com.clydelizardo.f2pgames.list.usecase.GetFreeGamesResult
 import com.clydelizardo.f2pgames.model.GameInfo
 import com.clydelizardo.f2pgames.util.Status
 import com.clydelizardo.f2pgames.util.filterIsInstance
+import com.clydelizardo.f2pgames.util.refreshableLiveData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
@@ -19,28 +20,25 @@ class GameListViewModelV2 @Inject constructor(
     private val getFreeGames: GetFreeGames,
     private val changeGameFavoriteStatus: ChangeGameFavoriteStatus
 ) : ViewModel() {
-    private val refreshCounter = MutableLiveData(0)
-    private val resultFlow = refreshCounter.switchMap {
-        liveData {
-            emit(Status.Loading())
-            when (val freeGames = getFreeGames()) {
-                GetFreeGamesResult.Failure -> emit(Status.Failure())
-                is GetFreeGamesResult.Success -> emit(Status.Success(freeGames.list))
-            }
+    private val resultLiveData = refreshableLiveData {
+        emit(Status.Loading())
+        when (val freeGames = getFreeGames()) {
+            GetFreeGamesResult.Failure -> emit(Status.Failure())
+            is GetFreeGamesResult.Success -> emit(Status.Success(freeGames.list))
         }
     }
 
-    val isLoading = resultFlow.map { it is Status.Loading<*> }
-    val list = resultFlow.filterIsInstance<Status.Success<List<GameInfo>>>()
+    val isLoading = resultLiveData.map { it is Status.Loading<*> }
+    val list = resultLiveData.filterIsInstance<Status.Success<List<GameInfo>>>()
         .map {
             it.content
         }
 
-    val failures = resultFlow.filterIsInstance<Status.Failure<Any>>()
+    val failures = resultLiveData.filterIsInstance<Status.Failure<Any>>()
     val favoriteUpdateResult = MutableLiveData<FavoriteStatusResult>()
 
     fun refresh() {
-        refreshCounter.value = refreshCounter.value?.plus(1)
+        resultLiveData.refresh()
     }
 
     fun toggleFavoriteState(gameInfo: GameInfo) {
