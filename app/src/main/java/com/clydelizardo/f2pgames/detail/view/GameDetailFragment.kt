@@ -12,8 +12,10 @@ import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.clydelizardo.f2pgames.R
 import com.clydelizardo.f2pgames.databinding.FragmentGameDetailBinding
+import com.clydelizardo.f2pgames.databinding.FragmentGameDetailV2Binding
 import com.clydelizardo.f2pgames.detail.viewmodel.DetailState
 import com.clydelizardo.f2pgames.detail.viewmodel.GameDetailViewModel
+import com.clydelizardo.f2pgames.detail.viewmodel.GameDetailViewModelV2
 import com.clydelizardo.f2pgames.model.GameDetail
 import com.clydelizardo.f2pgames.model.GameInfo
 import com.clydelizardo.f2pgames.util.toDisplayFormat
@@ -23,76 +25,31 @@ import kotlinx.coroutines.flow.collect
 @AndroidEntryPoint
 class GameDetailFragment : Fragment() {
 
-    val viewModel: GameDetailViewModel by viewModels()
-
-    val args: GameDetailFragmentArgs by navArgs()
+    val viewModel: GameDetailViewModelV2 by viewModels()
+    private var binding: FragmentGameDetailV2Binding? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return FragmentGameDetailBinding.inflate(inflater, container, false).root
+    ): View {
+
+        return FragmentGameDetailV2Binding.inflate(inflater, container, false).apply {
+            binding = this
+        }.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val binding = FragmentGameDetailBinding.bind(view)
 
-        val gameInfo: GameInfo = args.gameInfo
-        viewModel.setGame(gameInfo)
-
-        viewLifecycleOwner.lifecycleScope.launchWhenResumed {
-            viewModel.detail.collect { detailState ->
-                when (detailState) {
-                    DetailState.Failure -> {
-                        // TODO()
-                    }
-                    DetailState.Loading -> {
-                        binding.circularProgress.show()
-                        binding.circularProgress.progress = 40
-                        binding.detailGroup.visibility = View.GONE
-                    }
-                    is DetailState.Success -> {
-                        bindDetailToView(binding, detailState.detail)
-                    }
-                }
-            }
+        binding?.apply {
+            lifecycleOwner = viewLifecycleOwner
+            viewModel = this@GameDetailFragment.viewModel
         }
     }
 
-    private fun bindDetailToView(
-        bind: FragmentGameDetailBinding,
-        gameDetail: GameDetail
-    ) {
-        bind.apply {
-            detailGroup.visibility = View.VISIBLE
-            gameDetail.screenshotUrls.firstOrNull()?.let {
-                detailThumbnail.visibility = View.VISIBLE
-                Glide.with(this@GameDetailFragment)
-                    .load(it)
-                    .into(detailThumbnail)
-            } ?: run {
-                detailThumbnail.visibility = View.GONE
-            }
-
-            detailName.text = gameDetail.title
-            detailDescription.text = gameDetail.description
-            detailExtraInfo.text = resources.getString(
-                R.string.game_details_spec,
-                gameDetail.genre,
-                gameDetail.platform,
-                gameDetail.publisher,
-                gameDetail.developer,
-                gameDetail.releaseDate.toDisplayFormat(getLocale())
-            )
-            circularProgress.hide()
-        }
-    }
-
-    private fun getLocale() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-        resources.configuration.locales[0]
-    } else {
-        resources.configuration.locale
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
     }
 }

@@ -16,7 +16,6 @@ import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.Exception
 
-@Singleton
 class GameInfoWithFavoritesRepository @Inject constructor(
     private val service: GameInfoService,
     private val dao: GameInfoDao

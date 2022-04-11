@@ -4,9 +4,11 @@
 
 package com.clydelizardo.f2pgames.list.view
 
+import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.bumptech.glide.Glide
 import com.clydelizardo.f2pgames.model.GameInfo
 
 object ViewBinding {
@@ -31,5 +33,13 @@ object ViewBinding {
     @BindingAdapter("onRefresh")
     fun onRefresh(refreshLayout: SwipeRefreshLayout, onRefresh: () -> Unit) {
         refreshLayout.setOnRefreshListener(onRefresh)
+    }
+
+    @JvmStatic
+    @BindingAdapter("imageUrl")
+    fun imageUrl(imageView: ImageView, url: String?) {
+        Glide.with(imageView)
+            .load(url)
+            .into(imageView)
     }
 }
