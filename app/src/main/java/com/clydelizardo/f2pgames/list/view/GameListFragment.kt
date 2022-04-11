@@ -8,8 +8,10 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.clydelizardo.f2pgames.NavGraphGameDirections
 import com.clydelizardo.f2pgames.databinding.FragmentGameListBinding
 import com.clydelizardo.f2pgames.list.viewmodel.GameListState
 import com.clydelizardo.f2pgames.list.viewmodel.GameListViewModel
@@ -88,10 +90,7 @@ class GameListFragment : Fragment() {
         val gameListAdapter = GameListAdapter()
         gameListAdapter.selectionListener = object : OnGameSelected {
             override fun onGameSelected(game: GameInfo) {
-                val context = context
-                if (context is OnGameSelected) {
-                    context.onGameSelected(game)
-                }
+                requireView().findNavController().navigate(NavGraphGameDirections.actionShowGameDetails(game))
             }
         }
         gameListAdapter.longPressListener = object : LongPressListener {
