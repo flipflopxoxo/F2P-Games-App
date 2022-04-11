@@ -26,4 +26,10 @@ object ViewBinding {
             }
         }
     }
+
+    @JvmStatic
+    @BindingAdapter("onRefresh")
+    fun onRefresh(refreshLayout: SwipeRefreshLayout, onRefresh: () -> Unit) {
+        refreshLayout.setOnRefreshListener(onRefresh)
+    }
 }

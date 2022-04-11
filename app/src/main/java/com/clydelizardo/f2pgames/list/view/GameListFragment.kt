@@ -7,19 +7,14 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.clydelizardo.f2pgames.NavGraphGameDirections
-import com.clydelizardo.f2pgames.databinding.FragmentGameListBinding
 import com.clydelizardo.f2pgames.databinding.FragmentGameListV2Binding
-import com.clydelizardo.f2pgames.list.viewmodel.GameListState
-import com.clydelizardo.f2pgames.list.viewmodel.GameListViewModel
 import com.clydelizardo.f2pgames.list.viewmodel.GameListViewModelV2
 import com.clydelizardo.f2pgames.model.GameInfo
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
 class GameListFragment : Fragment() {
@@ -52,9 +47,6 @@ class GameListFragment : Fragment() {
                         DividerItemDecoration.VERTICAL
                     )
                 )
-            }
-            refreshLayout.setOnRefreshListener {
-                this@GameListFragment.viewModel.refresh()
             }
         }
 

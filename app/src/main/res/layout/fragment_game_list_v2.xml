@@ -17,7 +17,8 @@
             android:id="@+id/refreshLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:isRefreshing="@{viewModel.isLoading}">
+            app:isRefreshing="@{viewModel.isLoading}"
+            app:onRefresh="@{viewModel::refresh}">
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
                 android:layout_width="0dp"
