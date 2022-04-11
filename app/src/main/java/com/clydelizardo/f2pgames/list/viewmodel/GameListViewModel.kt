@@ -10,8 +10,6 @@ import com.clydelizardo.f2pgames.model.GameInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -110,19 +108,6 @@ class GameListViewModel @Inject constructor(
             }
         }
     }
-}
-
-sealed class GameListState(
-    val isRefreshing: Boolean = false,
-    val gameList: List<GameInfo> = emptyList()
-) {
-    object Loading : GameListState(isRefreshing = true)
-    object Failure : GameListState()
-    data class Success(val list: List<GameInfo>) : GameListState(gameList = list)
-    data class Refreshing(val list: List<GameInfo>) : GameListState(isRefreshing = true, gameList = list)
-    data class Updating(val list: List<GameInfo>) : GameListState(isRefreshing = true, gameList = list)
-    data class FailedRefresh(val list: List<GameInfo>) : GameListState(gameList = list)
-    data class FailedUpdate(val list: List<GameInfo>) : GameListState(gameList = list)
 }
 
 fun <T> MutableStateFlow<T>.compareAndTransform(

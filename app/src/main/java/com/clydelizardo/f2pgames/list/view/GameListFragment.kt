@@ -13,8 +13,10 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.clydelizardo.f2pgames.NavGraphGameDirections
 import com.clydelizardo.f2pgames.databinding.FragmentGameListBinding
+import com.clydelizardo.f2pgames.databinding.FragmentGameListV2Binding
 import com.clydelizardo.f2pgames.list.viewmodel.GameListState
 import com.clydelizardo.f2pgames.list.viewmodel.GameListViewModel
+import com.clydelizardo.f2pgames.list.viewmodel.GameListViewModelV2
 import com.clydelizardo.f2pgames.model.GameInfo
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -22,15 +24,15 @@ import kotlinx.coroutines.flow.collect
 @AndroidEntryPoint
 class GameListFragment : Fragment() {
 
-    private val viewModel: GameListViewModel by viewModels()
-    private var binding: FragmentGameListBinding? = null
+    private val viewModel: GameListViewModelV2 by viewModels()
+    private var binding: FragmentGameListV2Binding? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentGameListBinding.inflate(layoutInflater, container, false)
+        binding = FragmentGameListV2Binding.inflate(layoutInflater, container, false)
         return binding?.root
     }
 
@@ -52,32 +54,13 @@ class GameListFragment : Fragment() {
                 )
             }
             refreshLayout.setOnRefreshListener {
-                if (!this@GameListFragment.viewModel.refresh()) {
-                    refreshLayout.isRefreshing = false
-                }
+                this@GameListFragment.viewModel.refresh()
             }
         }
 
-        viewLifecycleOwner.lifecycleScope.launchWhenResumed {
-            viewModel.state.collect {
-                when (it) {
-                    is GameListState.FailedRefresh -> {
-                        Toast.makeText(context, "Failed to refresh", Toast.LENGTH_LONG).show()
-                    }
-                    is GameListState.FailedUpdate -> {
-                        Toast.makeText(
-                            context,
-                            "Failed to update favorite states",
-                            Toast.LENGTH_LONG
-                        ).show()
-                        viewModel.removeFailedState()
-                    }
-                    GameListState.Failure -> {
-                        Toast.makeText(context, "Failed to retrieve games", Toast.LENGTH_SHORT)
-                            .show()
-                    }
-                }
-            }
+        viewModel.failures.observe(viewLifecycleOwner) {
+            Toast.makeText(context, "Failed to retrieve games", Toast.LENGTH_SHORT)
+                .show()
         }
     }
 
