@@ -7,6 +7,7 @@ import com.clydelizardo.f2pgames.list.usecase.GetFreeGames
 import com.clydelizardo.f2pgames.list.usecase.GetFreeGamesResult
 import com.clydelizardo.f2pgames.model.GameInfo
 import com.clydelizardo.f2pgames.util.Status
+import com.clydelizardo.f2pgames.util.filterIsInstance
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
@@ -30,20 +31,12 @@ class GameListViewModelV2 @Inject constructor(
     }
 
     val isLoading = resultFlow.map { it is Status.Loading<*> }
-    val list = MediatorLiveData<List<GameInfo>>().apply {
-        addSource(resultFlow) {
-            if (it is Status.Success) {
-                value = it.content
-            }
+    val list = resultFlow.filterIsInstance<Status.Success<List<GameInfo>>>()
+        .map {
+            it.content
         }
-    }
-    val failures = MediatorLiveData<Status.Failure<Any>>().apply {
-        addSource(resultFlow) {
-            if (it is Status.Failure) {
-                value = it
-            }
-        }
-    }
+
+    val failures = resultFlow.filterIsInstance<Status.Failure<Any>>()
     val favoriteUpdateResult = MutableLiveData<FavoriteStatusResult>()
 
     fun refresh() {
