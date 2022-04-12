@@ -6,36 +6,43 @@ import com.clydelizardo.f2pgames.list.usecase.FavoriteStatusResult
 import com.clydelizardo.f2pgames.list.usecase.GetFreeGames
 import com.clydelizardo.f2pgames.list.usecase.GetFreeGamesResult
 import com.clydelizardo.f2pgames.model.GameInfo
+import com.clydelizardo.f2pgames.util.RefreshableLiveData
 import com.clydelizardo.f2pgames.util.Status
 import com.clydelizardo.f2pgames.util.filterIsInstance
 import com.clydelizardo.f2pgames.util.refreshableLiveData
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@ExperimentalCoroutinesApi
 @HiltViewModel
 class GameListViewModelV2 @Inject constructor(
     private val getFreeGames: GetFreeGames,
     private val changeGameFavoriteStatus: ChangeGameFavoriteStatus
 ) : ViewModel() {
-    private val resultLiveData = refreshableLiveData {
-        emit(Status.Loading())
-        when (val freeGames = getFreeGames()) {
-            GetFreeGamesResult.Failure -> emit(Status.Failure())
-            is GetFreeGamesResult.Success -> emit(Status.Success(freeGames.list))
+    private val resultLiveData: RefreshableLiveData<Status<List<GameInfo>>> by lazy {
+        refreshableLiveData {
+            emit(Status.Loading())
+            when (val freeGames = getFreeGames()) {
+                GetFreeGamesResult.Failure -> emit(Status.Failure())
+                is GetFreeGamesResult.Success -> emit(Status.Success(freeGames.list))
+            }
         }
     }
 
-    val isLoading = resultLiveData.map { it is Status.Loading<*> }
-    val list = resultLiveData.filterIsInstance<Status.Success<List<GameInfo>>>()
-        .map {
-            it.content
-        }
+    val isLoading: LiveData<Boolean> by lazy {
+        resultLiveData.map { it is Status.Loading<*> }
+    }
+    val list: LiveData<List<GameInfo>> by lazy {
+        resultLiveData.filterIsInstance<Status.Success<List<GameInfo>>>()
+            .map {
+                it.content
+            }
+    }
 
-    val failures = resultLiveData.filterIsInstance<Status.Failure<Any>>()
-    val favoriteUpdateResult = MutableLiveData<FavoriteStatusResult>()
+    val failures: LiveData<Status.Failure<Any>> by lazy {
+        resultLiveData.filterIsInstance<Status.Failure<Any>>()
+    }
+    val favoriteUpdateResult: MutableLiveData<FavoriteStatusResult> = MutableLiveData<FavoriteStatusResult>()
 
     fun refresh() {
         resultLiveData.refresh()
@@ -46,7 +53,8 @@ class GameListViewModelV2 @Inject constructor(
             return
         }
         viewModelScope.launch {
-            val favouriteStatusUpdateResult = changeGameFavoriteStatus(gameInfo, !gameInfo.isFavorite)
+            val favouriteStatusUpdateResult =
+                changeGameFavoriteStatus(gameInfo, !gameInfo.isFavorite)
             favoriteUpdateResult.value = favouriteStatusUpdateResult
             if (favouriteStatusUpdateResult is FavoriteStatusResult.Success) {
                 refresh()

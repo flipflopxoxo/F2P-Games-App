@@ -14,6 +14,6 @@ fun interface ChangeGameFavoriteStatus {
 }
 
 sealed class FavoriteStatusResult {
-    class Success(val updatedGameInfo: GameInfo) : FavoriteStatusResult()
+    data class Success(val updatedGameInfo: GameInfo) : FavoriteStatusResult()
     object Failure : FavoriteStatusResult()
 }
