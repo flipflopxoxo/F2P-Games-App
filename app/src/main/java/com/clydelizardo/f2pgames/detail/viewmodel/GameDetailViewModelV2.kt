@@ -19,26 +19,30 @@ class GameDetailViewModelV2 @Inject constructor(
 ) : ViewModel() {
     val gameInfo = GameDetailFragmentArgs.fromSavedStateHandle(savedStateHandle).gameInfo
 
-    private val detailResult = liveData {
-        emit(DetailState.Loading)
-        emit(
-            when (val detailResult = getGameDetail(gameInfo)) {
-                is GetGameDetailResult.Success -> {
-                    DetailState.Success(detailResult.value)
+    private val detailResult by lazy {
+        liveData {
+            emit(DetailState.Loading)
+            emit(
+                when (val gameDetail = getGameDetail(gameInfo)) {
+                    is GetGameDetailResult.Success -> {
+                        DetailState.Success(gameDetail.value)
+                    }
+                    GetGameDetailResult.Failure -> {
+                        DetailState.Failure
+                    }
                 }
-                GetGameDetailResult.Failure -> {
-                    DetailState.Failure
-                }
-            }
-        )
-    }
-    val detail = detailResult.filterIsInstance<DetailState.Success>()
-        .map {
-            it.detail
+            )
         }
+    }
+    val detail by lazy {
+        detailResult.filterIsInstance<DetailState.Success>()
+            .map(DetailState.Success::detail)
+    }
 
-    val isLoading = detailResult.map {
-        it is DetailState.Loading
+    val isLoading by lazy {
+        detailResult.map {
+            it is DetailState.Loading
+        }
     }
 
     sealed class DetailState {
