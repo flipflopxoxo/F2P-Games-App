@@ -9,9 +9,11 @@ import androidx.room.Room
 import com.clydelizardo.f2pgames.repository.room.AppDatabase
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.migration.DisableInstallInCheck
 import javax.inject.Singleton
 
 @Module
+@DisableInstallInCheck
 class AppDatabaseModule {
     @Singleton
     @Provides

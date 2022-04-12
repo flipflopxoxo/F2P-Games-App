@@ -3,7 +3,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.clydelizardo.f2pgames.list.viewmodel.GameListViewModel" />
+            type="com.clydelizardo.f2pgames.list.viewmodel.GameListViewModelV2" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -17,7 +17,8 @@
             android:id="@+id/refreshLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:isRefreshing="@{viewModel.state.isRefreshing}">
+            app:isRefreshing="@{viewModel.isLoading}"
+            app:onRefresh="@{viewModel::refresh}">
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
                 android:layout_width="0dp"
@@ -26,7 +27,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:gameInfoList="@{viewModel.state.gameList}"
+                app:gameInfoList="@{viewModel.list}"
                 />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

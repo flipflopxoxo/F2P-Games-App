@@ -16,4 +16,10 @@ data class GameDetail(
     val link: String,
     val thumbnail: String,
     val isFavorite: Boolean = false
-)
+) {
+    val previewUrl: String?
+        get() = screenshotUrls.firstOrNull()
+
+    val hasScreenshot: Boolean
+        get() = screenshotUrls.isNotEmpty()
+}

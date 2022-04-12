@@ -7,11 +7,13 @@ import com.clydelizardo.f2pgames.list.usecase.FavoriteStatusResult
 import com.clydelizardo.f2pgames.list.usecase.GetFreeGames
 import com.clydelizardo.f2pgames.list.usecase.GetFreeGamesResult
 import com.clydelizardo.f2pgames.model.GameInfo
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 class GameListViewModel @Inject constructor(
     private val getFreeGames: GetFreeGames,
     private val changeGameFavoriteStatus: ChangeGameFavoriteStatus
@@ -106,16 +108,6 @@ class GameListViewModel @Inject constructor(
             }
         }
     }
-}
-
-sealed class GameListState {
-    object Loading : GameListState()
-    object Failure : GameListState()
-    data class Success(val gameList: List<GameInfo>) : GameListState()
-    data class Refreshing(val gameList: List<GameInfo>) : GameListState()
-    data class Updating(val gameList: List<GameInfo>) : GameListState()
-    data class FailedRefresh(val gameList: List<GameInfo>) : GameListState()
-    data class FailedUpdate(val gameList: List<GameInfo>) : GameListState()
 }
 
 fun <T> MutableStateFlow<T>.compareAndTransform(

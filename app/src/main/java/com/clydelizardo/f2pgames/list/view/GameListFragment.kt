@@ -7,49 +7,65 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.clydelizardo.f2pgames.GameApplication
-import com.clydelizardo.f2pgames.databinding.FragmentGameListBinding
-import com.clydelizardo.f2pgames.list.viewmodel.GameListState
-import com.clydelizardo.f2pgames.list.viewmodel.GameListViewModel
+import com.clydelizardo.f2pgames.NavGraphGameDirections
+import com.clydelizardo.f2pgames.databinding.FragmentGameListV2Binding
+import com.clydelizardo.f2pgames.list.viewmodel.GameListViewModelV2
 import com.clydelizardo.f2pgames.model.GameInfo
-import kotlinx.coroutines.flow.collect
-import javax.inject.Inject
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class GameListFragment : Fragment() {
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    private val viewModel: GameListViewModel by viewModels(factoryProducer = { viewModelFactory })
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        (context?.applicationContext as GameApplication?)?.component?.gameListComponent()?.create()
-            ?.inject(this)
-    }
+    private val viewModel: GameListViewModelV2 by viewModels()
+    private var binding: FragmentGameListV2Binding? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return FragmentGameListBinding.inflate(layoutInflater, container, false).root
+        binding = FragmentGameListV2Binding.inflate(layoutInflater, container, false)
+        return binding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val binding = FragmentGameListBinding.bind(view)
+        binding?.apply {
+            lifecycleOwner = viewLifecycleOwner
+            viewModel = this@GameListFragment.viewModel
 
+            recyclerView.apply {
+                layoutManager =
+                LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+                adapter = createAdapter()
+                addItemDecoration(
+                    DividerItemDecoration(
+                        context,
+                        DividerItemDecoration.VERTICAL
+                    )
+                )
+            }
+        }
+
+        viewModel.failures.observe(viewLifecycleOwner) {
+            Toast.makeText(context, "Failed to retrieve games", Toast.LENGTH_SHORT)
+                .show()
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
+    }
+
+    private fun createAdapter(): GameListAdapter {
         val gameListAdapter = GameListAdapter()
         gameListAdapter.selectionListener = object : OnGameSelected {
             override fun onGameSelected(game: GameInfo) {
-                val context = context
-                if (context is OnGameSelected) {
-                    context.onGameSelected(game)
-                }
+                requireView().findNavController().navigate(NavGraphGameDirections.actionShowGameDetails(game))
             }
         }
         gameListAdapter.longPressListener = object : LongPressListener {
@@ -57,73 +73,6 @@ class GameListFragment : Fragment() {
                 viewModel.toggleFavoriteState(gameInfo)
             }
         }
-        binding.recyclerView.apply {
-            layoutManager =
-                LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-            adapter = gameListAdapter
-            addItemDecoration(
-                DividerItemDecoration(
-                    context,
-                    DividerItemDecoration.VERTICAL
-                )
-            )
-        }
-        binding.refreshLayout.setOnRefreshListener {
-            if (!viewModel.refresh()) {
-                binding.refreshLayout.isRefreshing = false
-            }
-        }
-
-        viewLifecycleOwner.lifecycleScope.launchWhenResumed {
-            viewModel.state.collect {
-                when (it) {
-                    is GameListState.FailedRefresh -> {
-                        gameListAdapter.submitList(it.gameList)
-                        binding.refreshLayout.isEnabled = false
-                        binding.refreshLayout.isRefreshing = false
-                        Toast.makeText(context, "Failed to refresh", Toast.LENGTH_LONG).show()
-                        viewModel.removeFailedState()
-                    }
-                    is GameListState.FailedUpdate -> {
-                        gameListAdapter.submitList(it.gameList)
-                        binding.refreshLayout.isEnabled = false
-                        binding.refreshLayout.isRefreshing = false
-                        Toast.makeText(
-                            context,
-                            "Failed to update favorite states",
-                            Toast.LENGTH_LONG
-                        ).show()
-                        viewModel.removeFailedState()
-                    }
-                    GameListState.Failure -> {
-                        gameListAdapter.submitList(emptyList())
-                        binding.refreshLayout.isEnabled = true
-                        binding.refreshLayout.isRefreshing = false
-                        Toast.makeText(context, "Failed to retrieve games", Toast.LENGTH_SHORT)
-                            .show()
-                    }
-                    GameListState.Loading -> {
-                        gameListAdapter.submitList(emptyList())
-                        binding.refreshLayout.isEnabled = true
-                        binding.refreshLayout.isRefreshing = true
-                    }
-                    is GameListState.Refreshing -> {
-                        gameListAdapter.submitList(it.gameList)
-                        binding.refreshLayout.isEnabled = true
-                        binding.refreshLayout.isRefreshing = true
-                    }
-                    is GameListState.Success -> {
-                        gameListAdapter.submitList(it.gameList)
-                        binding.refreshLayout.isEnabled = true
-                        binding.refreshLayout.isRefreshing = false
-                    }
-                    is GameListState.Updating -> {
-                        gameListAdapter.submitList(it.gameList)
-                        binding.refreshLayout.isEnabled = true
-                        binding.refreshLayout.isRefreshing = true
-                    }
-                }
-            }
-        }
+        return gameListAdapter
     }
 }
