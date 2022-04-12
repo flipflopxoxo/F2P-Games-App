@@ -39,9 +39,6 @@ class GameListViewModelV2 @Inject constructor(
             }
     }
 
-    val failures: LiveData<Status.Failure<Any>> by lazy {
-        resultLiveData.filterIsInstance<Status.Failure<Any>>()
-    }
     val favoriteUpdateResult: MutableLiveData<FavoriteStatusResult> = MutableLiveData<FavoriteStatusResult>()
 
     fun refresh() {

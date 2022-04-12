@@ -12,8 +12,10 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.clydelizardo.f2pgames.NavGraphGameDirections
 import com.clydelizardo.f2pgames.databinding.FragmentGameListV2Binding
+import com.clydelizardo.f2pgames.list.usecase.FavoriteStatusResult
 import com.clydelizardo.f2pgames.list.viewmodel.GameListViewModelV2
 import com.clydelizardo.f2pgames.model.GameInfo
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -39,7 +41,7 @@ class GameListFragment : Fragment() {
 
             recyclerView.apply {
                 layoutManager =
-                LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+                    LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
                 adapter = createAdapter()
                 addItemDecoration(
                     DividerItemDecoration(
@@ -50,9 +52,20 @@ class GameListFragment : Fragment() {
             }
         }
 
-        viewModel.failures.observe(viewLifecycleOwner) {
-            Toast.makeText(context, "Failed to retrieve games", Toast.LENGTH_SHORT)
-                .show()
+        viewModel.favoriteUpdateResult.observe(viewLifecycleOwner) {
+            Snackbar.make(requireView(), getMessageFor(it), Snackbar.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun getMessageFor(it: FavoriteStatusResult): String {
+        return when (it) {
+            FavoriteStatusResult.Failure -> "Failed to update favorites"
+            is FavoriteStatusResult.Success -> if (it.updatedGameInfo.isFavorite) {
+                "Successfully added ${it.updatedGameInfo.name} to favorites"
+            } else {
+                "Successfully removed ${it.updatedGameInfo.name} from favorites"
+
+            }
         }
     }
 
@@ -65,7 +78,8 @@ class GameListFragment : Fragment() {
         val gameListAdapter = GameListAdapter()
         gameListAdapter.selectionListener = object : OnGameSelected {
             override fun onGameSelected(game: GameInfo) {
-                requireView().findNavController().navigate(NavGraphGameDirections.actionShowGameDetails(game))
+                requireView().findNavController()
+                    .navigate(NavGraphGameDirections.actionShowGameDetails(game))
             }
         }
         gameListAdapter.longPressListener = object : LongPressListener {

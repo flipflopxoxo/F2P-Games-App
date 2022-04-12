@@ -45,12 +45,11 @@ class GameListViewModelV2Test {
 
         val viewModel = gameListViewModelV2(getFreeGames = getFreeGames)
 
-        val (isLoadingObserver, favoriteUpdateResultObserver, listObserver, failuresObserver) = getObservers()
+        val (isLoadingObserver, favoriteUpdateResultObserver, listObserver) = getObservers()
 
         viewModel.favoriteUpdateResult.observe(lifecycleOwner, favoriteUpdateResultObserver)
         viewModel.isLoading.observe(lifecycleOwner, isLoadingObserver)
         viewModel.list.observe(lifecycleOwner, listObserver)
-        viewModel.failures.observe(lifecycleOwner, failuresObserver)
 
         lifecycleOwner.currentState = Lifecycle.State.RESUMED
 
@@ -63,7 +62,6 @@ class GameListViewModelV2Test {
         }
         verify(inverse = true) {
             favoriteUpdateResultObserver.onChanged(any())
-            failuresObserver.onChanged(any())
         }
     }
 
@@ -79,12 +77,11 @@ class GameListViewModelV2Test {
 
         val viewModel = gameListViewModelV2(getFreeGames = getFreeGames)
 
-        val (isLoadingObserver, favoriteUpdateResultObserver, listObserver, failuresObserver) = getObservers()
+        val (isLoadingObserver, favoriteUpdateResultObserver, listObserver) = getObservers()
 
         viewModel.favoriteUpdateResult.observe(lifecycleOwner, favoriteUpdateResultObserver)
         viewModel.isLoading.observe(lifecycleOwner, isLoadingObserver)
         viewModel.list.observe(lifecycleOwner, listObserver)
-        viewModel.failures.observe(lifecycleOwner, failuresObserver)
 
         lifecycleOwner.currentState = Lifecycle.State.RESUMED
 
@@ -95,7 +92,6 @@ class GameListViewModelV2Test {
             isLoadingObserver.onChanged(false)
             listObserver.onChanged(any())
             favoriteUpdateResultObserver.onChanged(any())
-            failuresObserver.onChanged(any())
         }
     }
 
@@ -120,12 +116,11 @@ class GameListViewModelV2Test {
             changeGameFavoriteStatus = changeGameFavoriteStatus
         )
 
-        val (isLoadingObserver, favoriteUpdateResultObserver, listObserver, failuresObserver) = getObservers()
+        val (isLoadingObserver, favoriteUpdateResultObserver, listObserver) = getObservers()
 
         viewModel.favoriteUpdateResult.observe(lifecycleOwner, favoriteUpdateResultObserver)
         viewModel.isLoading.observe(lifecycleOwner, isLoadingObserver)
         viewModel.list.observe(lifecycleOwner, listObserver)
-        viewModel.failures.observe(lifecycleOwner, failuresObserver)
 
         lifecycleOwner.currentState = Lifecycle.State.RESUMED
 
@@ -151,9 +146,6 @@ class GameListViewModelV2Test {
         verify {
             favoriteUpdateResultObserver.onChanged(FavoriteStatusResult.Success(updatedGameInfo))
         }
-        verify(inverse = true) {
-            failuresObserver.onChanged(any())
-        }
     }
 
 
@@ -175,12 +167,11 @@ class GameListViewModelV2Test {
             changeGameFavoriteStatus = changeGameFavoriteStatus
         )
 
-        val (isLoadingObserver, favoriteUpdateResultObserver, listObserver, failuresObserver) = getObservers()
+        val (isLoadingObserver, favoriteUpdateResultObserver, listObserver) = getObservers()
 
         viewModel.favoriteUpdateResult.observe(lifecycleOwner, favoriteUpdateResultObserver)
         viewModel.isLoading.observe(lifecycleOwner, isLoadingObserver)
         viewModel.list.observe(lifecycleOwner, listObserver)
-        viewModel.failures.observe(lifecycleOwner, failuresObserver)
 
         lifecycleOwner.currentState = Lifecycle.State.RESUMED
 
@@ -195,9 +186,6 @@ class GameListViewModelV2Test {
         }
         verify {
             favoriteUpdateResultObserver.onChanged(FavoriteStatusResult.Failure)
-        }
-        verify(inverse = true) {
-            failuresObserver.onChanged(any())
         }
     }
 
@@ -232,7 +220,6 @@ class GameListViewModelV2Test {
     private data class GameListObservers(
         val isLoadingObserver: Observer<Boolean> = mockk(relaxed = true),
         val favoriteUpdateResultObserver: Observer<FavoriteStatusResult> = mockk(relaxed = true),
-        val listObserver: Observer<List<GameInfo>> = mockk(relaxed = true),
-        val failuresObserver: Observer<Status.Failure<Any>> = mockk(relaxed = true)
+        val listObserver: Observer<List<GameInfo>> = mockk(relaxed = true)
     )
 }
