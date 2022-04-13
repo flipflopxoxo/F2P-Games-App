@@ -7,7 +7,7 @@
     <fragment
         android:id="@+id/gameListFragment"
         android:name="com.clydelizardo.f2pgames.list.view.GameListFragment"
-        android:label="GameListFragment" />
+        android:label="Free games" />
     <fragment
         android:id="@+id/gameDetailFragment"
         android:name="com.clydelizardo.f2pgames.detail.view.GameDetailFragment"

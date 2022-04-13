@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
+import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.clydelizardo.f2pgames.NavGraphGameDirections
@@ -64,7 +65,6 @@ class GameListFragment : Fragment() {
                 "Successfully added ${it.updatedGameInfo.name} to favorites"
             } else {
                 "Successfully removed ${it.updatedGameInfo.name} from favorites"
-
             }
         }
     }
